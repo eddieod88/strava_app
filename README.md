@@ -6,7 +6,4 @@ Lil leaderboard ting for the 'cuse lot
 
 requires Python 3.6+
 
-Include a `.env` file in root directory including your Strava API access token:
-```.env
-STRAVA_ACCESS_TOKEN="{YOUR_ACCESS_TOKEN}"
-```
+Include your Strava access token in the template `.env` provided
