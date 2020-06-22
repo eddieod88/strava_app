@@ -10,15 +10,18 @@ CLUB_ID = 65323
 PAGE = 1
 PER_PAGE = 30
 
-try:
-    session = Session()
-    session.headers = HEADERS
 
-    club_activities_response = session.get(STRAVA_BASE_URL + f'clubs/{CLUB_ID}/activities', page=PAGE, perPage=PER_PAGE)
-
-    pprint(club_activities_response.content)
-except requests.RequestException as e:
-    raise requests.HTTPError(f'Exception when getting the club activity list: {e}')
-
-
-lovely_table = convert_strava_response_to_dataframe(club_activities_response)
+if __name__ == '__main__':
+    try:
+        session = Session()
+        session.headers = HEADERS
+        payload = {'page': PAGE, 'perPage': PER_PAGE}
+        club_activities_response = session.get(STRAVA_BASE_URL + f'clubs/{CLUB_ID}/activities', params=payload)
+    except requests.RequestException as e:
+        raise requests.HTTPError(f'Exception when getting the club activity list: {e}')
+    else:
+        if club_activities_response == 200:
+            lovely_table = convert_strava_response_to_dataframe(club_activities_response)
+        else:
+            print(club_activities_response.status_code)
+            pprint(club_activities_response.content)
