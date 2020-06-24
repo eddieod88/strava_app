@@ -2,7 +2,7 @@ import requests
 from requests import Session
 from pprint import pprint
 
-from app.utils import convert_strava_response_to_dataframe
+from app.utils import add_converted_distance_column, convert_strava_response_to_dataframe
 from settings import STRAVA_BASE_URL, HEADERS
 
 
@@ -21,7 +21,10 @@ if __name__ == '__main__':
         raise requests.HTTPError(f'Exception when getting the club activity list: {e}')
     else:
         if club_activities_response == 200:
-            lovely_table = convert_strava_response_to_dataframe(club_activities_response)
+            raw_distance_table = convert_strava_response_to_dataframe(club_activities_response, groupby_activity_type=True)
+            distance_converted_table = add_converted_distance_column(raw_distance_table)
+            # TODO:
+            #  1. convert to a CSV file then done!
         else:
             print(club_activities_response.status_code)
             pprint(club_activities_response.content)
