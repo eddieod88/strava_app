@@ -22,9 +22,10 @@ if __name__ == '__main__':
     else:
         if club_activities_response == 200:
             raw_distance_table = convert_strava_response_to_dataframe(club_activities_response, groupby_activity_type=True)
-            distance_converted_table = add_converted_distance_column(raw_distance_table)
-            # TODO:
-            #  1. convert to a CSV file then done!
+            conversions_included_table = add_converted_distance_column(raw_distance_table)
+            final_table = conversions_included_table.groupby(['first_name', 'last_name']).sum()
+            with open('data/cumulative_totals/test.csv', 'w') as csv_file:
+                final_table.to_csv(csv_file)
         else:
             print(club_activities_response.status_code)
             pprint(club_activities_response.content)

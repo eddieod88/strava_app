@@ -32,16 +32,16 @@ def convert_strava_response_to_dataframe(strava_data: [Dict], groupby_activity_t
     return df
 
 
-def add_converted_distance_column(cleaned_df: DataFrame) -> DataFrame:
+def add_converted_distance_column(df: DataFrame) -> DataFrame:
     def mapper(df_row):
         raw_distance = df_row.distance
+        # df.name accesses the index here
         activity_type = df_row.name[2]
         try:
-            # df.name accesses the index here
             return raw_distance * ACTIVITY_MULTIPLIER_MAPPING[activity_type]
         except KeyError:
             # TODO: should make this a log.
             print(f'Warning: New type not included in mapping: {activity_type}')
             return raw_distance
-    cleaned_df['converted_distance'] = cleaned_df.apply(mapper, axis=1)
-    return cleaned_df.groupby(['first_name', 'last_name']).sum()
+    df['converted_distance'] = df.apply(mapper, axis=1)
+    return df
