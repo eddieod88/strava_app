@@ -21,4 +21,6 @@ except requests.RequestException as e:
     raise requests.HTTPError(f'Exception when getting the club activity list: {e}')
 
 
-lovely_table = convert_strava_response_to_dataframe(club_activities_response)
+lovely_dataframe = convert_strava_response_to_dataframe(club_activities_response.content)
+print(lovely_dataframe)
+# lovely_dataframe.to_csv()  # (or something similar)
